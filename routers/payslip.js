@@ -18,7 +18,7 @@ const REFRESH_TOKEN =
 
 // test api
 router.get("/testing", (req, res) => {
-  console.log({ success: true })
+  //console.log({ success: true })
   res.status(200).json({ success: true })
 })
 
@@ -27,9 +27,9 @@ router.get("/testing", (req, res) => {
 router.get("/fetch_all_payslip_type1", async (req, res) => {
   try {
     const Pending = await payslip.find({ status: "pending" }).sort({ createdAt: -1 })
-    console.log({ pendingTest: Pending })
+    //console.log({ pendingTest: Pending })
     const Queried = await payslip.find({ status: "queried" }).sort({ createdAt: -1 })
-    console.log({ pendingTest: Queried })
+    //console.log({ pendingTest: Queried })
     const Approved = await payslip.find({ status: "approved" }).sort({ createdAt: -1 })
     const Verified = await payslip.find({ status: "verified" }).sort({ createdAt: -1 })
     const PaidButBillPendingPaysl = await payslip.find({ status: "paidButBillPending" }).sort({ createdAt: -1 })
@@ -37,13 +37,13 @@ router.get("/fetch_all_payslip_type1", async (req, res) => {
     const Paid = await payslip.find({ status: "paid" }).sort({ updatedAt: -1 })
     const Settled = await payslip.find({ status: "settled" }).sort({ updatedAt: -1 })
     const Printed = await payslip.find({ status: "printed" }).sort({ updatedAt: -1 })
-    // console.log({Pending1})
+    // //console.log({Pending1})
     // const Pending=[{Asff:"sfsdf"},{aadasd:"ASDD"}]
     res
       .status(200)
       .json({ Pending, Queried, Approved,Verified,Cancelled, PaidButBillPendingPaysl ,Paid, Settled, Printed });
   } catch (err) {
-    console.log({ err })
+    //console.log({ err })
     res.status(500).json(err);
   }
 });
@@ -56,7 +56,7 @@ router.get("/fetch_all_payslip", async (req, res) => {
       .status(200)
       .json({ data });
   } catch (err) {
-    console.log({ err })
+    //console.log({ err })
     res.status(500).json(err);
   }
 });
@@ -65,7 +65,7 @@ router.get("/fetch_all_payslip", async (req, res) => {
 router.post("/new_payslip", async (req, res) => {
   try {
     const find_payslip_id = await payslip.find();
-    console.log({ find_payslip_id })
+    //console.log({ find_payslip_id })
     let updated_payslip_id;
     if (find_payslip_id) {
       const pay_id = find_payslip_id[find_payslip_id?.length - 1]?.payslip_id;
@@ -80,7 +80,7 @@ router.post("/new_payslip", async (req, res) => {
       name: req.body.name,
       payslipFilledBy :req.body.payslipFilledBy,
       email_id: req.body.email_id,
-      phone: req.body.phone,
+      paymentMethod: req.body.paymentMethod,
       department: req.body.department,
       details: req.body.details,
       detailContent: req.body.detailContent,
@@ -101,7 +101,7 @@ router.post("/new_payslip", async (req, res) => {
       .status(200)
       .json({ payslip_save });
   } catch (err) {
-    console.log({ err })
+    //console.log({ err })
     res.status(500).json(err);
   }
 });
@@ -116,7 +116,7 @@ router.get("/fetch_payslip/:payslip_id", async (req, res) => {
       .status(200)
       .json({ data });
   } catch (err) {
-    console.log({ err })
+    //console.log({ err })
     res.status(500).json(err);
   }
 });
@@ -137,7 +137,7 @@ router.post("/update_payslip/:payslip_id", async (req, res) => {
       .status(200)
       .json({ data });
   } catch (err) {
-    console.log({ err })
+    //console.log({ err })
     res.status(500).json(err);
   }
 });
@@ -156,34 +156,80 @@ router.post("/payslip_mail_send", async (req, res) => {
         pass: "dhkotkapeoduhuei",
       },
     });
-    var mailList = req.body.email_id;
-
+    
+    var mailList =await req.body.email_id;
+    //console.log({mailListtttttttttttttttttttttttttt:req.body})
+    
     let mailOptions = {
       from: "iskdhn.technical@gmail.com",
       to: mailList,
       subject: `${req.body.payslip_id}(New Payslip)`,
-      html: `<h1><b>${req.body.payslip_id
-        }</b></h1><br/>
-        
-          Name : ${req.body.name} <br/>
-          PayslipFilledBy : ${req.body.payslipFilledBy} <br/>,
-          Email : ${req.body.email_id} <br/>
-          Phone : ${req.body.phone} <br/>
-          Type: ${req.body.type} <br/>
-          ${req.body.type=="Internal Transfer" ?  `Cost Center (From) : ${req.body.cost_center}` : `Cost Center : ${req.body.cost_center} `}<br/>
-          ${req.body.type=="Internal Transfer" &&  `Cost Center (To) : ${req.body.cost_center_to}   <br/>`}
-          Payment Mode: ${req.body.payment_mode} <br/>
-          Amount :₹ ${req.body.amount} <br/>
-          Details :<br/> ${req.body.details} <br/>
-          
-        <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: iskdhn.technical@gmail.com, Contact: +917255918744</p><br/><br /><footer><p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p></footer>`,
+ 
+      html: `
+        <div style="font-family: Arial, sans-serif; color: #333;">
+          <p><strong style="color:red;">Payee Name:</strong> ${req.body.name}</p>
+         
+          <p><strong style="color:red;">Payslip Filled By:</strong> ${req.body.payslipFilledBy}</p>
+          <p><strong style="color:red;">Type:</strong> ${req.body.type}</p>
+          <p><strong style="color:red;">Cost Center:</strong> ${req.body.cost_center}</p>
+          ${req.body.type == "Internal Transfer" ? `<p><strong style="color:red;">Cost Center (From):</strong> ${req.body.cost_center}</p>` : ''}
+          ${req.body.type == "Internal Transfer" ? `<p><strong style="color:red;">Cost Center (To):</strong> ${req.body.cost_center_to}</p>` : ''}
+          <p><strong style="color:red;">Payment Mode:</strong> ${req.body.payment_mode}</p>
+          <p><strong style="color:red;">Total Amount:</strong> <span style="font-size: 18px; font-weight: bold; color: #ff6600;">₹${req.body.amount}</span></p>
+
+           <table style="width: 100%; border-collapse: collapse;">
+           <tbody>
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>Ben. Name- </strong>${req.body.bank.beneficiary_name}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>Acc. No.- </strong>${req.body.bank.account_number}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>IFSC No.- </strong>${req.body.bank.ifsc}</td>
+                </tr>
+            </tbody>
+          </table>
+    
+          <!-- Details Section Table -->
+          <h2 style="color: #4CAF50;">Details</h2>
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr>
+              <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">department</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Item</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Quantity</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${req.body.detailContent.map(item => `
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.department}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.itemName}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.quantity}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.amount}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+    
+          <br />
+        <p style="color: #555;">------------</p>
+          <p style="color: #555;">Contact Accounts Department </p>
+          <p>Email: iskdhn.technical@gmail.com, Contact: +917644070770</p>
+          <br />
+          <footer style="color: #aaa;">
+            <p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p>
+          </footer>
+        </div>
+      `,
+ 
+ 
     };
+    
 
     await transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
-        console.log(error);
+        //console.log(error);
       } else {
-        console.log("Email sent: " + info.response);
+        //console.log("Email sent: " + info.response);
       }
     });
 
@@ -199,7 +245,7 @@ router.post("/payslip_mail_send", async (req, res) => {
     //         setDefaultsOnInsert: true,
     //       }
     //     );
-    //     console.log(updateSession);
+    //     //console.log(updateSession);
     //   }
 
     // const updateTutor = await Session.updateOne(
@@ -209,7 +255,7 @@ router.post("/payslip_mail_send", async (req, res) => {
 
     res.status(200).json("Email sent");
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.status(500).json("Email not sent");
   }
 });
@@ -225,34 +271,96 @@ router.post("/payslip_mail_send_advance", async (req, res) => {
         pass: "dhkotkapeoduhuei",
       },
     });
-    var mailList = [req.body.email_id, 'acc.iskcondhanbad@gmail.com', ];
+    var mailList = [await req.body.email_id, 'acc.iskcondhanbad@gmail.com', ];
 
+    // let mailOptions = {
+    //   from: "iskdhn.technical@gmail.com",
+    //   to: mailList,
+    //   subject: `${req.body.payslip_id}`,
+    //   html: `<h1><b>${req.body.payslip_id
+    //     }</b>(Advance)</h1><br/>
+      
+       
+    //     Name : ${req.body.name} <br/>
+    //     PayslipFilledBy : ${req.body.payslipFilledBy} <br/>,
+    //     Email : ${req.body.email_id} <br/>
+    //     Phone : ${req.body.phone} <br/>
+    //     Cost Center : ${req.body.cost_center} <br/>
+    //     Type: ${req.body.type} <br/>
+    //     Payment Mode: ${req.body.payment_mode} <br/>
+    //     Amount :₹ ${req.body.amount} <br/>
+    //     Details :<br/> ${req.body.details} <br/>
+        
+    //   <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +917644070770</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved ISKCON Dhanbad</p></footer>`,
+    // };
     let mailOptions = {
       from: "iskdhn.technical@gmail.com",
       to: mailList,
       subject: `${req.body.payslip_id}`,
-      html: `<h1><b>${req.body.payslip_id
-        }</b>(Advance)</h1><br/>
-      
-       
-        Name : ${req.body.name} <br/>
-        PayslipFilledBy : ${req.body.payslipFilledBy} <br/>,
-        Email : ${req.body.email_id} <br/>
-        Phone : ${req.body.phone} <br/>
-        Cost Center : ${req.body.cost_center} <br/>
-        Type: ${req.body.type} <br/>
-        Payment Mode: ${req.body.payment_mode} <br/>
-        Amount :₹ ${req.body.amount} <br/>
-        Details :<br/> ${req.body.details} <br/>
-        
-      <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: iskdhn.technical@gmail.com, Contact: +917255918744</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved ISKCON Dhanbad</p></footer>`,
+ 
+      html: `
+        <div style="font-family: Arial, sans-serif; color: #333;">
+          <p><strong style="color:red;">Payee Name:</strong> ${req.body.name}</p>
+         
+          <p><strong style="color:red;">Payslip Filled By:</strong> ${req.body.payslipFilledBy}</p>
+          
+          <p><strong style="color:red;">Type:</strong> ${req.body.type}</p>
+          <p><strong style="color:red;">Cost Center:</strong> ${req.body.cost_center}</p>
+          
+          <p><strong style="color:red;">Payment Mode:</strong> ${req.body.payment_mode}</p>
+          <p><strong style="color:red;">Total Amount:</strong> <span style="font-size: 18px; font-weight: bold; color: #ff6600;">₹${req.body.amount}</span></p>
+          
+          <table style="width: 100%; border-collapse: collapse;">
+           <tbody>
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>Ben. Name- </strong>${req.body.bank.beneficiary_name}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>Acc. No.- </strong>${req.body.bank.account_number}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>IFSC No.- </strong>${req.body.bank.ifsc}</td>
+                </tr>
+            </tbody>
+          </table>
+    
+          <!-- Details Section Table -->
+          <h2 style="color: #4CAF50;">Details</h2>
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr>
+              <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">department</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Item</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Quantity</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${req.body.detailContent.map(item => `
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.department}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.itemName}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.quantity}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.amount}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+    
+          <br />
+        <p style="color: #555;">------------</p>
+          <p style="color: #555;">Contact Accounts Department </p>
+          <p>Email: iskdhn.technical@gmail.com, Contact: +917644070770</p>
+          <br />
+          <footer style="color: #aaa;">
+            <p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p>
+          </footer>
+        </div>
+      `,
+ 
     };
 
     await transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
-        console.log(error);
+        //console.log(error);
       } else {
-        console.log("Email sent: " + info.response);
+        //console.log("Email sent: " + info.response);
       }
     });
 
@@ -268,7 +376,7 @@ router.post("/payslip_mail_send_advance", async (req, res) => {
     //         setDefaultsOnInsert: true,
     //       }
     //     );
-    //     console.log(updateSession);
+    //     //console.log(updateSession);
     //   }
 
     // const updateTutor = await Session.updateOne(
@@ -278,7 +386,7 @@ router.post("/payslip_mail_send_advance", async (req, res) => {
 
     res.status(200).json("Email sent");
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.status(500).json("Email not sent");
   }
 });
@@ -301,35 +409,99 @@ router.post("/payslip_mail_send_advanceSettlement", async (req, res) => {
         pass: "dhkotkapeoduhuei",
       },
     });
-    var mailList = [req.body.email_id, 'acc.iskcondhanbad@gmail.com'];
+    var mailList = [await req.body.email_id, 'acc.iskcondhanbad@gmail.com'];
 
+    // let mailOptions = {
+    //   from: "iskdhn.technical@gmail.com",
+    //   to: mailList,
+    //   subject: `${req.body.payslip_id}`,
+    //   html: `<h1><b>${req.body.payslip_id
+    //     }</b>(Advance Settlement)</h1><br/>
+      
+       
+    //     Name : ${req.body.name} <br/>
+    //     PayslipFilledBy : ${req.body.payslipFilledBy} <br/>,
+    //     Email : ${req.body.email_id} <br/>
+    //     Phone : ${req.body.phone} <br/>
+    //     Cost Center : ${req.body.cost_center} <br/>
+    //     Type: ${req.body.type} <br/>
+    //     Payment Mode: ${req.body.payment_mode} <br/>
+    //     Amount :₹ ${req.body.amount} <br/>
+    //     Advance Taken:₹ ${req.body.type === "Advance Settlement" ? req.body?.previousFormDetails?.amount : "Nill"} <br/>
+    //     Details :<br/> ${req.body.details} <br/>
+        
+    //   <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +917644070770</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved ISKCON Dhanbad</p></footer>`,
+    // };
     let mailOptions = {
       from: "iskdhn.technical@gmail.com",
       to: mailList,
       subject: `${req.body.payslip_id}`,
-      html: `<h1><b>${req.body.payslip_id
-        }</b>(Advance Settlement)</h1><br/>
-      
-       
-        Name : ${req.body.name} <br/>
-        PayslipFilledBy : ${req.body.payslipFilledBy} <br/>,
-        Email : ${req.body.email_id} <br/>
-        Phone : ${req.body.phone} <br/>
-        Cost Center : ${req.body.cost_center} <br/>
-        Type: ${req.body.type} <br/>
-        Payment Mode: ${req.body.payment_mode} <br/>
-        Amount :₹ ${req.body.amount} <br/>
-        Advance Taken:₹ ${req.body.type === "Advance Settlement" ? req.body?.previousFormDetails?.amount : "Nill"} <br/>
-        Details :<br/> ${req.body.details} <br/>
-        
-      <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: iskdhn.technical@gmail.com, Contact: +917255918744</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved ISKCON Dhanbad</p></footer>`,
+ 
+      html: `
+        <div style="font-family: Arial, sans-serif; color: #333;">
+        <h2 style="color: #4CAF50;">Advance Settlement</h2>
+          <p><strong style="color:red;">Payee Name:</strong> ${req.body.name}</p>
+         
+          <p><strong style="color:red;">Payslip Filled By:</strong> ${req.body.payslipFilledBy}</p>
+          
+          <p><strong style="color:red;">Type:</strong> ${req.body.type}</p>
+          <p><strong style="color:red;">Cost Center:</strong> ${req.body.cost_center}</p>
+          
+          <p><strong style="color:red;">Payment Mode:</strong> ${req.body.payment_mode}</p>
+          <p><strong style="color:red;">Total Amount:</strong> <span style="font-size: 18px; font-weight: bold; color: #ff6600;">₹${req.body.amount}</span></p>
+          
+          <table style="width: 100%; border-collapse: collapse;">
+           <tbody>
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>Ben. Name- </strong>${req.body.bank.beneficiary_name}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>Acc. No.- </strong>${req.body.bank.account_number}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>IFSC No.- </strong>${req.body.bank.ifsc}</td>
+                </tr>
+            </tbody>
+          </table>
+         ${req.body.type === "Advance Settlement"?`<p><strong style="color:red;">Advance Taken:₹</strong> ${req.body?.previousFormDetails?.amount}</p>`:`<p><strong style="color:red;">Advance Taken:</strong> "Nill"</p>`}
+    
+          <!-- Details Section Table -->
+          <h2 style="color: #4CAF50;">Details</h2>
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr>
+              <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">department</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Item</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Quantity</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${req.body.detailContent.map(item => `
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.department}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.itemName}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.quantity}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.amount}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+    
+          <br />
+        <p style="color: #555;">------------</p>
+          <p style="color: #555;">Contact Accounts Department </p>
+          <p>Email: iskdhn.technical@gmail.com, Contact: +917644070770</p>
+          <br />
+          <footer style="color: #aaa;">
+            <p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p>
+          </footer>
+        </div>
+      `,
+ 
     };
 
     await transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
-        console.log(error);
+        //console.log(error);
       } else {
-        console.log("Email sent: " + info.response);
+        //console.log("Email sent: " + info.response);
       }
     });
 
@@ -345,7 +517,7 @@ router.post("/payslip_mail_send_advanceSettlement", async (req, res) => {
     //         setDefaultsOnInsert: true,
     //       }
     //     );
-    //     console.log(updateSession);
+    //     //console.log(updateSession);
     //   }
 
     // const updateTutor = await Session.updateOne(
@@ -355,7 +527,7 @@ router.post("/payslip_mail_send_advanceSettlement", async (req, res) => {
 
     res.status(200).json("Email sent");
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.status(500).json("Email not sent");
   }
 });
@@ -373,34 +545,117 @@ router.post("/payslip_mail_send_hod", async (req, res) => {
     });
     // var mailList = 'shiv7255918@gmail.com';
 
+    // let mailOptions = {
+    //   from: "iskdhn.technical@gmail.com",
+    //   to: req.body.hod==="HG Damodar Govind Pr"? "Damodargovinddas.rns@gmail.com" : "hgsapapproval@gmail.com" ,
+    //   subject: `${req.body.payslip_id}(New Payslip Approval)`,
+    //   html: `<h1><b>${req.body.payslip_id
+    //     }</b></h1><br/>
+      
+       
+    //     Name : ${req.body.name} <br/>
+    //     PayslipFilledBy : ${req.body.payslipFilledBy} <br/>,
+    //     Type: ${req.body.type} <br/>
+    //     ${req.body.type=="Internal Transfer" ?  `Cost Center (From) : ${req.body.cost_center}` : `Cost Center : ${req.body.cost_center} `}<br/>
+    //     ${req.body.type=="Internal Transfer" &&  `Cost Center (To) : ${req.body.cost_center_to}   <br/>`}
+    //     Payment Mode: ${req.body.payment_mode} <br/>
+    //     Amount :₹ ${req.body.amount} <br/>
+    //   ${req.body.type === "Advance Settlement" && `Advance Taken:₹ ${req.body?.previousFormDetails?.amount}<br/>`} 
+    //     Details :<br/> ${req.body.details} <br/>
+
+    //     <button  id="approve"><a href="https://iskdhnaccountsdashboard-nr23mxt4ma-de.a.run.app/hod/approvalPage/${req.body.payslip_id}" style="text-decoration: none;">Approve</button>${" "}<button id="raiseQuery"><a href="https://iskdhnaccountsdashboard-nr23mxt4ma-de.a.run.app/hod/queryPage/${req.body.payslip_id}" style="text-decoration: none;">Raise Query</button>
+        
+    //   <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +917644070770</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved ISKCON Dhanbad</p></footer>`,
+    // };
     let mailOptions = {
       from: "iskdhn.technical@gmail.com",
       to: req.body.hod==="HG Damodar Govind Pr"? "Damodargovinddas.rns@gmail.com" : "hgsapapproval@gmail.com" ,
       subject: `${req.body.payslip_id}(New Payslip Approval)`,
-      html: `<h1><b>${req.body.payslip_id
-        }</b></h1><br/>
-      
-       
-        Name : ${req.body.name} <br/>
-        PayslipFilledBy : ${req.body.payslipFilledBy} <br/>,
-        Type: ${req.body.type} <br/>
-        ${req.body.type=="Internal Transfer" ?  `Cost Center (From) : ${req.body.cost_center}` : `Cost Center : ${req.body.cost_center} `}<br/>
-        ${req.body.type=="Internal Transfer" &&  `Cost Center (To) : ${req.body.cost_center_to}   <br/>`}
-        Payment Mode: ${req.body.payment_mode} <br/>
-        Amount :₹ ${req.body.amount} <br/>
-      ${req.body.type === "Advance Settlement" && `Advance Taken:₹ ${req.body?.previousFormDetails?.amount}<br/>`} 
-        Details :<br/> ${req.body.details} <br/>
-
-        <button  id="approve"><a href="https://iskdhnaccountsdashboard-nr23mxt4ma-de.a.run.app/hod/approvalPage/${req.body.payslip_id}" style="text-decoration: none;">Approve</button>${" "}<button id="raiseQuery"><a href="https://iskdhnaccountsdashboard-nr23mxt4ma-de.a.run.app/hod/queryPage/${req.body.payslip_id}" style="text-decoration: none;">Raise Query</button>
+      html: `
+      <div style="font-family: Arial, sans-serif; color: #333;">
+        <p><strong style="color:red;">Payee Name:</strong> ${req.body.name}</p>
+ 
+        <p><strong style="color:red;">Payslip Filled By:</strong> ${req.body.payslipFilledBy}</p>
         
-      <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: iskdhn.technical@gmail.com, Contact: +917255918744</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved ISKCON Dhanbad</p></footer>`,
+        <p><strong style="color:red;">Type:</strong> ${req.body.type}</p>
+        ${req.body.type=="Internal Transfer" ?  `<p><strong style="color:red;">Cost Center (From) :</strong> ${req.body.cost_center}</p>` : `<p><strong style="color:red;">Cost Center :</strong> ${req.body.cost_center} </p>`}
+        ${req.body.type=="Internal Transfer" ?  `<p><strong style="color:red;">Cost Center (To) :</strong> ${req.body.cost_center_to} </p>  <br/>`:''}
+ 
+
+        
+        
+        <p><strong style="color:red;">Payment Mode:</strong> ${req.body.payment_mode}</p>
+        <p><strong style="color:red;">Total Amount:</strong> <span style="font-size: 18px; font-weight: bold; color: #ff6600;">₹${req.body.amount}</span></p>
+
+         <table style="width: 100%; border-collapse: collapse;">
+         <tbody>
+              <tr>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>Ben. Name- </strong>${req.body.bank.beneficiary_name}</td>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>Acc. No.- </strong>${req.body.bank.account_number}</td>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>IFSC No.- </strong>${req.body.bank.ifsc}</td>
+              </tr>
+          </tbody>
+        </table>
+        
+        ${req.body.type == "Advance Settlement" ? `<p><strong style="color:red;">Advance Taken:₹:</strong> ${req.body?.previousFormDetails?.amount}</p>` :`<p><strong style="color:red;">Advance Taken:₹:</strong> "Nill"</p>`}
+       
+        <!-- Details Section Table -->
+        <h2 style="color: #4CAF50;">Details</h2>
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr>
+            <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">department</th>
+              <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Item</th>
+              <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Quantity</th>
+              <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${req.body.detailContent.map(item => `
+              <tr>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.department}</td>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.itemName}</td>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.quantity}</td>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.amount}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+               <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="margin: 10px auto;">
+  <tr>
+    <td>
+      <a href="https://iskdhnaccountsdashboard-nr23mxt4ma-de.a.run.app/hod/approvalPage/${req.body.payslip_id}" 
+         style="display: inline-block; padding: 10px 20px; margin: 5px; background-color: #4CAF50; color: white; 
+                text-decoration: none; border-radius: 5px; font-weight: bold;">
+        Approve
+      </a>
+    </td>
+    <td>
+      <a href="https://iskdhnaccountsdashboard-nr23mxt4ma-de.a.run.app/hod/queryPage/${req.body.payslip_id}" 
+         style="display: inline-block; padding: 10px 20px; margin: 5px; background-color: #f44336; color: white; 
+                text-decoration: none; border-radius: 5px; font-weight: bold;">
+        Raise Query
+      </a>
+    </td>
+  </tr>
+</table>
+        <br />
+      <p style="color: #555;">------------</p>
+        <p style="color: #555;">Contact Accounts Department </p>
+        <p>Email: iskdhn.technical@gmail.com, Contact: +917644070770</p>
+        <br />
+        <footer style="color: #aaa;">
+          <p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p>
+        </footer>
+      </div>
+    `,
     };
 
     await transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
-        console.log(error);
+        //console.log(error);
       } else {
-        console.log("Email sent: " + info.response);
+        //console.log("Email sent: " + info.response);
       }
     });
 
@@ -416,7 +671,7 @@ router.post("/payslip_mail_send_hod", async (req, res) => {
     //         setDefaultsOnInsert: true,
     //       }
     //     );
-    //     console.log(updateSession);
+    //     //console.log(updateSession);
     //   }
 
     // const updateTutor = await Session.updateOne(
@@ -426,7 +681,7 @@ router.post("/payslip_mail_send_hod", async (req, res) => {
 
     res.status(200).json("Email sent");
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.status(500).json("Email not sent");
   }
 });
@@ -442,35 +697,78 @@ router.post("/payslip_approved", async (req, res) => {
         pass: "dhkotkapeoduhuei",
       },
     });
-    var mailList = [req.body.email_id, 'acc.iskcondhanbad@gmail.com'];
+    var mailList = [await req.body.email_id, 'acc.iskcondhanbad@gmail.com'];
 
     let mailOptions = {
       from: "iskdhn.technical@gmail.com",
       to: mailList,
       subject: `${req.body.payslip_id}(Approved)`,
-      html: `<h3>Request with payslip id <b>${req.body.payslip_id}</b> is <b> Approved</b></h3><br/>
-        
+      html: `
+      <div style="font-family: Arial, sans-serif; color: #333;">
+       <h4 style="color: #4CAF50;">Request with payslip id ${req.body.payslip_id} is Approved</h4>
+        <p><strong style="color:red;">Payee Name:</strong> ${req.body.name}</p>
        
-      Name : ${req.body.name} <br/>
-      PayslipFilledBy : ${req.body.payslipFilledBy} <br/>,
-      Email : ${req.body.email_id} <br/>
-      Phone : ${req.body.phone} <br/>
-      Type: ${req.body.type} <br/>
-      ${req.body.type=="Internal Transfer" ?  `Cost Center (From) : ${req.body.cost_center}` : `Cost Center : ${req.body.cost_center} `}<br/>
-      ${req.body.type=="Internal Transfer" &&  `Cost Center (To) : ${req.body.cost_center_to}   <br/>`}
-      Payment Mode: ${req.body.payment_mode} <br/>
-      Amount :₹ ${req.body.amount} <br/>
-      Advance Taken:₹ ${req.body.type === "Advance Settlement" ? req.body?.previousFormDetails?.amount : "Nill"} <br/>
-      Details :<br/> ${req.body.details} <br/>
+ 
+        <p><strong style="color:red;">Payslip Filled By:</strong> ${req.body.payslipFilledBy}</p>
+ 
         
-      <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: iskdhn.technical@gmail.com, Contact: +917255918744</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved ISKCON Dhanbad</p></footer>`,
+        <p><strong style="color:red;">Type:</strong> ${req.body.type}</p>
+        ${req.body.type=="Internal Transfer" ?  `<p><strong style="color:red;">Cost Center (From) :</strong> ${req.body.cost_center}</p>` :`<p><strong style="color:red;">Cost Center :</strong> ${req.body.cost_center} </p>`}
+        ${req.body.type=="Internal Transfer" ? `<p><strong style="color:red;">Cost Center (To) :</strong> ${req.body.cost_center_to} </p>`:""}
+ 
+        <p><strong style="color:red;">Payment Mode:</strong> ${req.body.payment_mode}</p>
+        <p><strong style="color:red;">Total Amount:</strong> <span style="font-size: 18px; font-weight: bold; color: #ff6600;">₹${req.body.amount}</span></p>
+
+         <table style="width: 100%; border-collapse: collapse;">
+         <tbody>
+              <tr>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>Ben. Name- </strong>${req.body.bank.beneficiary_name}</td>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>Acc. No.- </strong>${req.body.bank.account_number}</td>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>IFSC No.- </strong>${req.body.bank.ifsc}</td>
+              </tr>
+          </tbody>
+        </table>
+         
+        <!-- Details Section Table -->
+        <h2 style="color: #4CAF50;">Details</h2>
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr>
+            <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">department</th>
+              <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Item</th>
+              <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Quantity</th>
+              <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${req.body.detailContent.map(item => `
+              <tr>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.department}</td>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.itemName}</td>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.quantity}</td>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.amount}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+  
+        <br />
+      <p style="color: #555;">------------</p>
+        <p style="color: #555;">Contact Accounts Department </p>
+        <p>Email: iskdhn.technical@gmail.com, Contact: +917644070770</p>
+        <br />
+        <footer style="color: #aaa;">
+          <p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p>
+        </footer>
+      </div>
+    `
     };
 
     await transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
-        console.log(error);
+        //console.log(error);
       } else {
-        console.log("Email sent: " + info.response);
+        //console.log("Email sent: " + info.response);
       }
     });
 
@@ -483,7 +781,7 @@ router.post("/payslip_approved", async (req, res) => {
 
     res.status(200).json("Email sent");
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.status(500).json("Email not sent");
   }
 });
@@ -499,7 +797,7 @@ router.post("/payslip_query_raised", async (req, res) => {
         pass: "dhkotkapeoduhuei",
       },
     });
-    var mailList = req.body.email_id;
+    var mailList =await req.body.email_id;
 
     let mailOptions = {
       from: "iskdhn.technical@gmail.com",
@@ -512,26 +810,26 @@ router.post("/payslip_query_raised", async (req, res) => {
        <p style="color:light-gray" >
        
        Name : ${req.body.name} <br/>
-       PayslipFilledBy : ${req.body.payslipFilledBy} <br/>,
+       PayslipFilledBy : ${req.body.payslipFilledBy} <br/>
        Email : ${req.body.email_id} <br/>
        Phone : ${req.body.phone} <br/>
        Type: ${req.body.type} <br/>
        ${req.body.type=="Internal Transfer" ?  `Cost Center (From) : ${req.body.cost_center}` : `Cost Center : ${req.body.cost_center} `}<br/>
-       ${req.body.type=="Internal Transfer" &&  `Cost Center (To) : ${req.body.cost_center_to}   <br/>`}
+       
        Payment Mode: ${req.body.payment_mode} <br/>
        Amount :₹ ${req.body.amount} <br/>
        Advance Taken:₹ ${req.body.type === "Advance Settlement" ? req.body?.previousFormDetails?.amount : "Nill"} <br/>
        Details :<br/> ${req.body.details} <br/>
      
         </p>
-      <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: iskdhn.technical@gmail.com, Contact: +917255918744</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved ISKCON Dhanbad</p></footer>`,
+      <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +917644070770</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved ISKCON Dhanbad</p></footer>`,
     };
 
     await transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
-        console.log(error);
+        //console.log(error);
       } else {
-        console.log("Email sent: " + info.response);
+        //console.log("Email sent: " + info.response);
       }
     });
 
@@ -547,7 +845,7 @@ router.post("/payslip_query_raised", async (req, res) => {
     //         setDefaultsOnInsert: true,
     //       }
     //     );
-    //     console.log(updateSession);
+    //     //console.log(updateSession);
     //   }
 
     // const updateTutor = await Session.updateOne(
@@ -561,7 +859,7 @@ router.post("/payslip_query_raised", async (req, res) => {
     })
     res.status(200).json("Email sent");
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.status(500).json("Email not sent");
   }
 });
@@ -584,35 +882,74 @@ router.post("/queryReply", async (req, res) => {
       from: "iskdhn.technical@gmail.com",
       to: req.body.hod==="HG Damodar Govind Pr"? "Damodargovinddas.rns@gmail.com" : "hgsapapproval@gmail.com" ,
       subject: `${req.body.payslip_id}(Reply to query)`,
-      html: `<h3>Reply from Accounts Department on a query in payslip no. <b>${req.body.payslip_id}</b></h3><br/>
+ 
+      html: `
+      <div style="font-family: Arial, sans-serif; color: #333;">
+      <h4 style="color: #4CAF50;">HOD has been queried on your payslip no. ${req.body.payslip_id}</h4>
+       <p style="color: #4CAF50"><strong style="color:red;">Query:</strong> ${req.body.query}</p><br/> 
+      <p><strong style="color:red;">Payee Name:</strong> ${req.body.name}</p>
+      
+        <p><strong style="color:red;">Payslip Filled By:</strong> ${req.body.payslipFilledBy}</p>
+        
+        <p><strong style="color:red;">Type:</strong> ${req.body.type}</p>
+        ${req.body.type=="Internal Transfer" ?  `<p><strong style="color:red;">Cost Center (From) :</strong> ${req.body.cost_center}</p>` : `<p><strong style="color:red;">Cost Center :</strong> ${req.body.cost_center} </p>`}
+        ${req.body.type=="Internal Transfer" ?  `<p><strong style="color:red;">Cost Center (To) :</strong> ${req.body.cost_center_to} </p>`:''}
 
-      <b>Query</b><br/>
-        <p>${req.body.query_value}</p><br/>
-        <b>Reply</b><br/>
-        <p>${req.body.query_reply}</p><br/>
-       <p style="color:light-gray" >
-       
-       Name : ${req.body.name} <br/>
-       PayslipFilledBy : ${req.body.payslipFilledBy} <br/>,
-       Email : ${req.body.email_id} <br/>
-       Phone : ${req.body.phone} <br/>
-       Type: ${req.body.type} <br/>
-       ${req.body.type=="Internal Transfer" ?  `Cost Center (From) : ${req.body.cost_center}` : `Cost Center : ${req.body.cost_center} `}<br/>
-       ${req.body.type=="Internal Transfer" &&  `Cost Center (To) : ${req.body.cost_center_to}   <br/>`}
-       Payment Mode: ${req.body.payment_mode} <br/>
-       Amount :₹ ${req.body.amount} <br/>
-       Advance Taken:₹ ${req.body.type === "Advance Settlement" ? req.body?.previousFormDetails?.amount : "Nill"} <br/>
-       Details :<br/> ${req.body.details} <br/>
-     
-        </p>
-      <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: iskdhn.technical@gmail.com, Contact: +917255918744</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved ISKCON Dhanbad</p></footer>`,
+        <p><strong style="color:red;">Payment Mode:</strong> ${req.body.payment_mode}</p>
+        <p><strong style="color:red;">Total Amount:</strong> <span style="font-size: 18px; font-weight: bold; color: #ff6600;">₹${req.body.amount}</span></p>
+
+        <table style="width: 100%; border-collapse: collapse;">
+        <tbody>
+              <tr>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>Ben. Name- </strong>${req.body.bank.beneficiary_name}</td>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>Acc. No.- </strong>${req.body.bank.account_number}</td>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>IFSC No.- </strong>${req.body.bank.ifsc}</td>
+              </tr>
+          </tbody>
+        </table>
+        ${req.body.type === "Advance Settlement"?`<p><strong style="color:red;">Advance Taken:₹</strong> ${req.body?.previousFormDetails?.amount}</p>`:`<p><strong style="color:red;">Advance Taken:</strong> "Nill"</p>`}
+        
+        <!-- Details Section Table -->
+        <h2 style="color: #4CAF50;">Details</h2>
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr>
+            <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">department</th>
+              <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Item</th>
+              <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Quantity</th>
+              <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${req.body.detailContent.map(item => `
+              <tr>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.department}</td>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.itemName}</td>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.quantity}</td>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.amount}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+  
+        <br />
+      <p style="color: #555;">------------</p>
+        <p style="color: #555;">Contact Accounts Department </p>
+        <p>Email: iskdhn.technical@gmail.com, Contact: +917644070770</p>
+        <br />
+        <footer style="color: #aaa;">
+          <p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p>
+        </footer>
+      </div>
+    `
+
     };
 
     await transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
-        console.log(error);
+        //console.log(error);
       } else {
-        console.log("Email sent: " + info.response);
+        //console.log("Email sent: " + info.response);
       }
     });
 
@@ -629,7 +966,7 @@ router.post("/queryReply", async (req, res) => {
 
 
   } catch (error) {
-    console.log({ error })
+    //console.log({ error })
     res.status(500).json({ error })
   }
 
@@ -641,16 +978,22 @@ router.post("/queryReply", async (req, res) => {
 // update status of payslip
 router.put("/updateStatus", async (req, res) => {
   try {
+    let actionDates = {
+      verifiedOn : new Date()
+    }
+    let queryValue = {}
+    if(req.body.updatedStatus == 'verified') queryValue = {actionDates} 
     const updateStatus = await payslip.updateOne({ payslip_id: req.body.payslip_id }, {
       status: req.body.updatedStatus,
       verifiedBy:req?.body?.verifiedBy  ? req?.body?.verifiedBy : null,
-      cancelledBy:req?.body?.cancelledBy ? req?.body?.cancelledBy : null
+      cancelledBy:req?.body?.cancelledBy ? req?.body?.cancelledBy : null,
+      ...queryValue
     })
     if (updateStatus) {
       res.status(200).json({ success: true })
     }
   } catch (error) {
-    console.log({ error })
+    //console.log({ error })
     res.status(500).json({ error })
   }
 
@@ -661,13 +1004,35 @@ router.put("/updatePaymentDateAndRemarks", async (req, res) => {
   try {
     const paidInfo = await payslip.updateOne({ payslip_id: req.body.payslip_id }, {
       paymentDate: req.body.paymentDate,
-      $push:{remarks:req.body.remark}
+      $push:{remarks:req.body.remark},
+      tdsAmountDeducted:req.body.tdsAmountDeducted + ""
     })
     if (paidInfo) {
       res.status(200).json({ success: true })
     }
   } catch (error) {
-    console.log({ error })
+    //console.log({ error })
+    res.status(500).json({ error })
+  }
+})
+
+// update payment date and remarks of payslip
+router.put("/updateCancelReason", async (req, res) => {
+  try {
+    let cancelDet = {
+      reason: req.body.reason,
+      updatedAt: new Date(),
+      agentId:req.body.agentId
+
+    }
+    const cancelInfo = await payslip.updateOne({ payslip_id: req.body.payslip_id }, {
+      $set:{cancelledDetails:cancelDet}
+    })
+    if (cancelInfo) {
+      res.status(200).json({ success: true })
+    }
+  } catch (error) {
+    //console.log({ error })
     res.status(500).json({ error })
   }
 })
@@ -682,41 +1047,336 @@ router.post("/payslip_mail_send_paid_sections", async (req, res) => {
         pass: "dhkotkapeoduhuei",
       },
     });
-    var mailList = req.body.email_id;
+    var mailList =await req.body.email_id;
+    console.log({mailllllll:req.body})
+    // let mailOptions = {
+    //   from: "iskdhn.technical@gmail.com",
+    //   to: mailList,
+    //   subject: `${req.body.payslip_id}(Amount Paid)`,
+    //   html: `<h1 style="color: green"><b> Payment Done(Kindly Check Payment Date & Transaction ID below) ${req.body.status === "paidButBillPending" ? "(Bill Is Pending)" : ""}</b></h1><br/>
+    //             <h1 style="color: green"><b>Payment Date: ${req.body.paymentDate}<b><br/></h1>
+    //             <h1 style="color: green"><b>Transaction Id: ${req.body.remark ? req.body.remark : "NA"}<b><br/></h1><br/>
 
+    //       Payslip Id: ${req.body.payslip_id}<br/>
+    //       Name : ${req.body.name} <br/>
+    //       Payslip Filled By : ${req.body.payslipFilledBy} <br/>
+    //       Email : ${req.body.email_id} <br/>
+    //       Phone : ${req.body.phone} <br/>
+    //       Type: ${req.body.type} <br/>
+    //       ${req.body.type=="Internal Transfer" ?  `Cost Center (From) : ${req.body.cost_center} - (To) : ${req.body.cost_center_to}` : `Cost Center : ${req.body.cost_center} `}<br/>
+    //       Payment Mode: ${req.body.payment_mode} <br/>
+    //       Amount :₹ ${req.body.amount} <br/>
+    //       Details :<br/> ${req.body.details} <br/>
+          
+    //     <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +917644070770</p><br/><br /><footer><p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p></footer>`,
+    // };
     let mailOptions = {
       from: "iskdhn.technical@gmail.com",
       to: mailList,
       subject: `${req.body.payslip_id}(Amount Paid)`,
-      html: `<h1 style="color: green"><b> Payment Done(Kindly Check Payment Date & Transaction ID below) ${req.body.status === "paidButBillPending" ? "(Bill Is Pending)" : ""}</b></h1><br/>
-                <h1 style="color: green"><b>Payment Date: ${req.body.paymentDate}<b><br/></h1>
-                <h1 style="color: green"><b>Transaction Id: ${req.body.remark ? req.body.remark : "NA"}<b><br/></h1><br/>
+      html: `
+        <div style="font-family: Arial, sans-serif; color: #333;">
+           <h1 style="color: #4CAF50;"><b> Payment Done(Kindly Check Payment Date & Transaction ID below) ${req.body.status === "paidButBillPending" ? "(Bill Is Pending)" : ""}</b></h1>
+           <table style="width: 100%; border-collapse: collapse;">
+           <tbody>
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center; background-color: #bbf7d0; color:#3d563f"><strong style="color:black;">Payment Date: </strong>${req.body.paymentDate}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center; background-color: #bbf7d0; color:#3d563f"><strong style="color:black;">Transaction Id: </strong>${req.body.remarks ? req.body.remarks : "NA"}</td>
+               
+                </tr>
+            </tbody>
+          </table>
+          <p><strong style="color:red;">Name:</strong> ${req.body.name}</p>
+         
+          <p><strong style="color:red;">Payslip Filled By:</strong> ${req.body.payslipFilledBy}</p>
+         
+          <p><strong style="color:red;">Type:</strong> ${req.body.type}</p>
+          <p><strong style="color:red;">Cost Center:</strong> ${req.body.cost_center}</p>
+          ${req.body.type == "Internal Transfer" ? `<p><strong style="color:red;">Cost Center (From):</strong> ${req.body.cost_center}</p>` : ''}
+          ${req.body.type == "Internal Transfer" ? `<p><strong style="color:red;">Cost Center (To):</strong> ${req.body.cost_center_to}</p>` : ''}
+          <p><strong style="color:red;">Payment Mode:</strong> ${req.body.payment_mode}</p>
+          <p><strong style="color:red;">Total Amount:</strong> <span style="font-size: 18px; font-weight: bold; color: #ff6600;">₹${req.body.amount}</span></p>
 
-          Payslip Id: ${req.body.payslip_id}<br/>
-          Name : ${req.body.name} <br/>
-          Payslip Filled By : ${req.body.payslipFilledBy} <br/>
-          Email : ${req.body.email_id} <br/>
-          Phone : ${req.body.phone} <br/>
-          Type: ${req.body.type} <br/>
-          ${req.body.type=="Internal Transfer" ?  `Cost Center (From) : ${req.body.cost_center} - (To) : ${req.body.cost_center_to}` : `Cost Center : ${req.body.cost_center} `}<br/>
-          Payment Mode: ${req.body.payment_mode} <br/>
-          Amount :₹ ${req.body.amount} <br/>
-          Details :<br/> ${req.body.details} <br/>
-          
-        <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: iskdhn.technical@gmail.com, Contact: +917644070770</p><br/><br /><footer><p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p></footer>`,
+           <table style="width: 100%; border-collapse: collapse;">
+           <tbody>
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>Ben. Name- </strong>${req.body.bank.beneficiary_name}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>Acc. No.- </strong>${req.body.bank.account_number}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>IFSC No.- </strong>${req.body.bank.ifsc}</td>
+                </tr>
+            </tbody>
+          </table>
+    
+          <!-- Details Section Table -->
+          <h2 style="color: #4CAF50;">Details</h2>
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr>
+              <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">department</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Item</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Quantity</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${req.body.detailContent.map(item => `
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.department}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.itemName}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.quantity}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.amount}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+    
+          <br />
+        <p style="color: #555;">------------</p>
+          <p style="color: #555;">Contact Accounts Department </p>
+          <p>Email: iskdhn.technical@gmail.com, Contact: +917255918744</p>
+          <br />
+          <footer style="color: #aaa;">
+            <p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p>
+          </footer>
+        </div>
+      `
     };
-
     await transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
-        console.log(error);
+        //console.log(error);
       } else {
-        console.log("Email sent: " + info.response);
+        //console.log("Email sent: " + info.response);
       }
     });
 
     res.status(200).json("Email sent");
   } catch (err) {
-    console.log(err);
+    //console.log(err);
+    res.status(500).json("Email not sent");
+  }
+});
+
+router.post("/payslip_mail_send_cancelled_sections", async (req, res) => {
+  try {
+    // sending mail to tutor
+    let transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "iskdhn.technical@gmail.com",
+        pass: "dhkotkapeoduhuei",
+      },
+    });
+    console.log({testinggg:req.body})
+    var mailList =await req.body.email_id;
+
+    // let mailOptions = {
+    //   from: "iskdhn.technical@gmail.com",
+    //   to: mailList,
+    //   subject: `${req.body.payslip_id}(Payslip Cancelled)`,
+    //   html: `<h1 style="color: red"><b> Payslip Is Cancelled</b></h1> 
+    //             <h2 style="color: black"><b>Reason: ${req.body.reason ? req.body.reason : "NA"}<b><br/></h2><br/>
+
+    //       Payslip Id: ${req.body.payslip_id}<br/>
+    //       Name : ${req.body.name} <br/>
+    //       Payslip Filled By : ${req.body.payslipFilledBy} <br/>
+    //       Email : ${req.body.email_id} <br/>
+    //       Phone : ${req.body.phone} <br/>
+    //       Type: ${req.body.type} <br/>
+    //       ${req.body.type=="Internal Transfer" ?  `Cost Center (From) : ${req.body.cost_center} - (To) : ${req.body.cost_center_to}` : `Cost Center : ${req.body.cost_center} `}<br/>
+    //       Payment Mode: ${req.body.payment_mode} <br/>
+    //       Amount :₹ ${req.body.amount} <br/>
+    //       Details :<br/> ${req.body.details} <br/>
+          
+    //     <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +917644070770</p><br/><br /><footer><p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p></footer>`,
+    // };
+    let mailOptions = {
+      from: "iskdhn.technical@gmail.com",
+      to: mailList,
+      subject: `${req.body.payslip_id}(Payslip Cancelled)`,
+      html: `
+        <div style="font-family: Arial, sans-serif; color: #333;">
+        <h2 style="color: red;">Payslip Is Cancelled</h2>
+         <p style="color: orange"><strong style="color:red;">Reason:</strong>  ${req.body.reason ? req.body.reason : "NA"}</p><br/> 
+        <p><strong style="color:red;">Payee Name:</strong> ${req.body.name}</p>
+        
+          <p><strong style="color:red;">Payslip Filled By:</strong> ${req.body.payslipFilledBy}</p>
+          
+          <p><strong style="color:red;">Type:</strong> ${req.body.type}</p>
+          ${req.body.type=="Internal Transfer" ?  `<p><strong style="color:red;">Cost Center (From) :</strong> ${req.body.cost_center}</p>` : `<p><strong style="color:red;">Cost Center :</strong> ${req.body.cost_center} </p>`}
+          
+  
+          <p><strong style="color:red;">Payment Mode:</strong> ${req.body.payment_mode}</p>
+          <p><strong style="color:red;">Total Amount:</strong> <span style="font-size: 18px; font-weight: bold; color: #ff6600;">₹${req.body.amount}</span></p>
+
+          <table style="width: 100%; border-collapse: collapse;">
+          <tbody>
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>Ben. Name- </strong>${req.body.bank.beneficiary_name}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>Acc. No.- </strong>${req.body.bank.account_number}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>IFSC No.- </strong>${req.body.bank.ifsc}</td>
+                </tr>
+            </tbody>
+          </table>
+          ${req.body.type === "Advance Settlement"?`<p><strong style="color:red;">Advance Taken:₹</strong> ${req.body?.previousFormDetails?.amount}</p>`:`<p><strong style="color:red;">Advance Taken:</strong> "Nill"</p>`}
+          
+          <!-- Details Section Table -->
+          <h2 style="color: #4CAF50;">Details</h2>
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr>
+              <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">department</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Item</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Quantity</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${req.body.detailContent.map(item => `
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.department}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.itemName}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.quantity}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.amount}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+    
+          <br />
+        <p style="color: #555;">------------</p>
+          <p style="color: #555;">Contact Accounts Department </p>
+          <p>Email: iskdhn.technical@gmail.com, Contact: +917644070770</p>
+          <br />
+          <footer style="color: #aaa;">
+            <p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p>
+          </footer>
+        </div>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        //console.log(error);
+      } else {
+        //console.log("Email sent: " + info.response);
+      }
+    });
+
+    res.status(200).json("Email sent");
+  } catch (err) {
+    //console.log(err);
+    res.status(500).json("Email not sent");
+  }
+});
+
+router.post("/payslip_mail_send_paidButBillSending_sections", async (req, res) => {
+  try {
+    // sending mail to tutor
+    let transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "iskdhn.technical@gmail.com",
+        pass: "dhkotkapeoduhuei",
+      },
+    });
+    var mailList =await req.body.email_id;
+
+    // let mailOptions = {
+    //   from: "iskdhn.technical@gmail.com",
+    //   to: mailList,
+    //   subject: `${req.body.payslip_id}(Payslip paid but bill pending)`,
+    //   html: `  <h2 style="color: black"><b>Your payment is done but you haven't submitted the bill. Submit the bill asap otherwise your next payslip will not be processed. 
+    //              <b><br/></h2><br/>
+
+    //       Payslip Id: ${req.body.payslip_id}<br/>
+    //       Name : ${req.body.name} <br/>
+    //       Payslip Filled By : ${req.body.payslipFilledBy} <br/>
+    //       Email : ${req.body.email_id} <br/>
+    //       Phone : ${req.body.phone} <br/>
+    //       Type: ${req.body.type} <br/>
+    //       ${req.body.type=="Internal Transfer" ?  `Cost Center (From) : ${req.body.cost_center} - (To) : ${req.body.cost_center_to}` : `Cost Center : ${req.body.cost_center} `}<br/>
+    //       Payment Mode: ${req.body.payment_mode} <br/>
+    //       Amount :₹ ${req.body.amount} <br/>
+    //       Details :<br/> ${req.body.details} <br/>
+          
+    //     <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +917644070770</p><br/><br /><footer><p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p></footer>`,
+    // };
+    let mailOptions = {
+      from: "iskdhn.technical@gmail.com",
+      to: mailList,
+      subject: `${req.body.payslip_id}(Payslip paid but bill pending)`,
+      html: `
+        <div style="font-family: Arial, sans-serif; color: #333;">
+        <h2 style="color: #4CAF50;">Payslip paid but bill pending</h2>
+         <p style="color: red"><strong style="color:red;">NOTE:-</strong> Your payment is done but you haven't submitted the bill. Submit the bill asap otherwise your next payslip will not be processed.</p><br/> 
+        <p><strong style="color:red;">Payee Name:</strong> ${req.body.name}</p>
+        
+          <p><strong style="color:red;">Payslip Filled By:</strong> ${req.body.payslipFilledBy}</p>
+          
+          <p><strong style="color:red;">Type:</strong> ${req.body.type}</p>
+          ${req.body.type=="Internal Transfer" ?  `<p><strong style="color:red;">Cost Center (From) :</strong> ${req.body.cost_center}</p>` : `<p><strong style="color:red;">Cost Center :</strong> ${req.body.cost_center} </p>`}
+          
+  
+          <p><strong style="color:red;">Payment Mode:</strong> ${req.body.payment_mode}</p>
+          <p><strong style="color:red;">Total Amount:</strong> <span style="font-size: 18px; font-weight: bold; color: #ff6600;">₹${req.body.amount}</span></p>
+
+          <table style="width: 100%; border-collapse: collapse;">
+          <tbody>
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>Ben. Name- </strong>${req.body.bank.beneficiary_name}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>Acc. No.- </strong>${req.body.bank.account_number}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;background-color: #f2f2f2;"><strong>IFSC No.- </strong>${req.body.bank.ifsc}</td>
+                </tr>
+            </tbody>
+          </table>
+          ${req.body.type === "Advance Settlement"?`<p><strong style="color:red;">Advance Taken:₹</strong> ${req.body?.previousFormDetails?.amount}</p>`:`<p><strong style="color:red;">Advance Taken:</strong> "Nill"</p>`}
+          
+          <!-- Details Section Table -->
+          <h2 style="color: #4CAF50;">Details</h2>
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr>
+              <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">department</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Item</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Quantity</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; color: #333;">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${req.body.detailContent.map(item => `
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.department}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.itemName}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.quantity}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.amount}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+    
+          <br />
+        <p style="color: #555;">------------</p>
+          <p style="color: #555;">Contact Accounts Department </p>
+          <p>Email: iskdhn.technical@gmail.com, Contact: +917644070770</p>
+          <br />
+          <footer style="color: #aaa;">
+            <p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p>
+          </footer>
+        </div>
+      `
+    };
+
+    await transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        //console.log(error);
+      } else {
+        //console.log("Email sent: " + info.response);
+      }
+    });
+
+    res.status(200).json("Email sent");
+  } catch (err) {
+    //console.log(err);
     res.status(500).json("Email not sent");
   }
 });
@@ -747,7 +1407,7 @@ router.post("/folderBuilder", async (req, res) => {
       fields: "files(id,name)",
     });
 
-    console.log({ create3: payslipSearch.data.files });
+    //console.log({ create3: payslipSearch.data.files });
 
     var payslipFolder = payslipSearch.data.files[0];
 
@@ -779,7 +1439,7 @@ router.post("/folderBuilder", async (req, res) => {
           setDefaultsOnInsert: true,
         }
       );
-      console.log("result:", result);
+      //console.log("result:", result);
      
     } else {
       let payslipFolder = await drive.files.create({
@@ -818,14 +1478,14 @@ router.post("/folderBuilder", async (req, res) => {
           setDefaultsOnInsert: true,
         }
       );
-      console.log("result:", result);
-      console.log("working session backend");
+      //console.log("result:", result);
+      //console.log("working session backend");
     }
-    console.log({folderLink})
+    //console.log({folderLink})
     res.status(200).json({ result: "success",folderLink });
   } catch (err) {
-    console.log("DRIVE HAVE SOME ERROR");
-    console.log({ err });
+    //console.log("DRIVE HAVE SOME ERROR");
+    //console.log({ err });
     res.status(500).json(err);
   }
 });
@@ -841,7 +1501,7 @@ router.get("/changeNaRemarksToAr", async (req, res) => {
       res.status(200).json({ success: true , findArNa})
     }
   } catch (error) {
-    console.log({ error })
+    //console.log({ error })
     res.status(500).json({ error })
   }
 })

@@ -34,7 +34,7 @@ router.post("/folderBuilder", async (req, res) => {
         fields: "files(id,name)",
       });
   
-      console.log({ create3: payslipSearch.data.files });
+      //console.log({ create3: payslipSearch.data.files });
   
       var payslipFolder = payslipSearch.data.files[0];
   
@@ -66,7 +66,7 @@ router.post("/folderBuilder", async (req, res) => {
             setDefaultsOnInsert: true,
           }
         );
-        console.log("result:", result);
+        //console.log("result:", result);
        
       } else {
         let payslipFolder = await drive.files.create({
@@ -105,14 +105,14 @@ router.post("/folderBuilder", async (req, res) => {
             setDefaultsOnInsert: true,
           }
         );
-        console.log("result:", result);
-        console.log("working session backend");
+        //console.log("result:", result);
+        //console.log("working session backend");
       }
   
       res.status(200).json({ result: "success" });
     } catch (err) {
-      console.log("DRIVE HAVE SOME ERROR");
-      console.log({ err });
+      //console.log("DRIVE HAVE SOME ERROR");
+      //console.log({ err });
       res.status(500).json(err);
     }
   });

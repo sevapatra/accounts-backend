@@ -19,7 +19,7 @@ router.post('/login', async (req, res) => {
       const adminData = await Auth.find();
       // let agent1=adminData[0]
    
-      console.log({adminData})
+      //console.log({adminData})
       if (adminData[0]?.password==req.body.Password && adminData[0]?.admin===req.body.Admin){
         // if (adminData){
           const accessToken = generateAccessToken(adminData);
@@ -37,7 +37,7 @@ router.post('/login', async (req, res) => {
       
     }
     catch (err) {
-      console.log({err})
+      //console.log({err})
       res.status(500).json(err);
     }
   });
@@ -45,3 +45,5 @@ router.post('/login', async (req, res) => {
 
   
   module.exports =router
+
+ 

@@ -15,7 +15,7 @@ const Payslip = new mongoose.Schema(
     email_id: {
       type: String,
     },
-    phone: {
+    paymentMethod: {
       type: String,
     },
     department: {
@@ -74,6 +74,15 @@ const Payslip = new mongoose.Schema(
   },
   approvalDate:{
     type:Number
+  },
+  cancelledDetails:{
+    type:Object
+  },
+  actionDates:{
+    type:Object
+  },
+  tdsAmountDeducted:{
+    type:String
   },
   },
   { timestamps: true }
