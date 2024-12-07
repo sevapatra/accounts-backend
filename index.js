@@ -8,16 +8,17 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const cors = require('cors');
 const nodemailer= require('nodemailer')
-dotenv.config();
-
-mongoose.connect(
-  process.env.MONGO_URL,
-  { useNewUrlParser: true, useUnifiedTopology: true },
-  () => {
-    //console.log("Connected to MongoDB");
-  }
-);
-
+dotenv.config(); 
+ 
+  mongoose.connect(
+    process.env.MONGO_URL,
+    { useNewUrlParser: true, useUnifiedTopology: true },
+    () => {
+      console.log("Connected to MongoDB");
+    }
+  );
+ 
+ 
 // const connectDatabase = async () => {
 //     try {
 //       // mongoose.set("useNewUrlParser", true);

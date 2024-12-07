@@ -36,8 +36,26 @@ const Payslip = new mongoose.Schema(
     cost_center_to: {
       type: String,
     },
-    hod: {
-      type: Object,
+    NaamPremHOD: {
+      status:{
+        type:Boolean,
+        default:false
+      },
+      date:{
+        type:Date,
+        default:null
+      }
+    },
+    RaviShankarHOD: {
+      status:{
+        type:Boolean,
+        default:false
+      },
+      date:{
+        type:Date,
+        default:null
+  
+      }
     },
     status:{
       type:String

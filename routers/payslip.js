@@ -63,9 +63,10 @@ router.get("/fetch_all_payslip", async (req, res) => {
 
 //adding new payslip
 router.post("/new_payslip", async (req, res) => {
+
   try {
     const find_payslip_id = await payslip.find();
-    //console.log({ find_payslip_id })
+    console.log({ find_payslip_id})
     let updated_payslip_id;
     if (find_payslip_id) {
       const pay_id = find_payslip_id[find_payslip_id?.length - 1]?.payslip_id;
@@ -91,11 +92,19 @@ router.post("/new_payslip", async (req, res) => {
       cost_center_to: req.body.cost_center_to,
       payment_mode:req.body.payment_mode,
       bank:req.body.bank,
-      hod: req.body.hod,
+        NaamPremHOD:{
+          status:false,
+          date:""
+        },
+        RaviShankarHOD:{
+          status:false,
+          date:""
+        },
       status: "pending"
 
     }
     const payslip_add = new payslip(payload);
+    console.log({payslip_add})
     const payslip_save = await payslip_add.save()
     res
       .status(200)
@@ -152,8 +161,8 @@ router.post("/payslip_mail_send", async (req, res) => {
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "iskdhn.technical@gmail.com",
-        pass: "dhkotkapeoduhuei",
+        user: "acc.sevapatra@gmail.com",
+        pass: process.env.NODE_MAILER_PASSWORD,
       },
     });
     
@@ -161,7 +170,7 @@ router.post("/payslip_mail_send", async (req, res) => {
     //console.log({mailListtttttttttttttttttttttttttt:req.body})
     
     let mailOptions = {
-      from: "iskdhn.technical@gmail.com",
+      from: "acc.sevapatra@gmail.com",
       to: mailList,
       subject: `${req.body.payslip_id}(New Payslip)`,
  
@@ -213,10 +222,10 @@ router.post("/payslip_mail_send", async (req, res) => {
           <br />
         <p style="color: #555;">------------</p>
           <p style="color: #555;">Contact Accounts Department </p>
-          <p>Email: iskdhn.technical@gmail.com, Contact: +917644070770</p>
+          <p>Email: acc.sevapatra@gmail.com, Contact: +91 9102971230</p>
           <br />
           <footer style="color: #aaa;">
-            <p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p>
+            <p>Copyright © 2022 SEVAPATRA FOUNDATION.<br/> All rights reserved SEVAPATRA FOUNDATION</p>
           </footer>
         </div>
       `,
@@ -267,14 +276,14 @@ router.post("/payslip_mail_send_advance", async (req, res) => {
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "iskdhn.technical@gmail.com",
-        pass: "dhkotkapeoduhuei",
+        user: "acc.sevapatra@gmail.com",
+        pass: process.env.NODE_MAILER_PASSWORD,
       },
     });
     var mailList = [await req.body.email_id, 'acc.iskcondhanbad@gmail.com', ];
 
     // let mailOptions = {
-    //   from: "iskdhn.technical@gmail.com",
+    //   from: "acc.sevapatra@gmail.com",
     //   to: mailList,
     //   subject: `${req.body.payslip_id}`,
     //   html: `<h1><b>${req.body.payslip_id
@@ -291,10 +300,10 @@ router.post("/payslip_mail_send_advance", async (req, res) => {
     //     Amount :₹ ${req.body.amount} <br/>
     //     Details :<br/> ${req.body.details} <br/>
         
-    //   <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +917644070770</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved ISKCON Dhanbad</p></footer>`,
+    //   <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +91 9102971230</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved SEVAPATRA FOUNDATION</p></footer>`,
     // };
     let mailOptions = {
-      from: "iskdhn.technical@gmail.com",
+      from: "acc.sevapatra@gmail.com",
       to: mailList,
       subject: `${req.body.payslip_id}`,
  
@@ -346,10 +355,10 @@ router.post("/payslip_mail_send_advance", async (req, res) => {
           <br />
         <p style="color: #555;">------------</p>
           <p style="color: #555;">Contact Accounts Department </p>
-          <p>Email: iskdhn.technical@gmail.com, Contact: +917644070770</p>
+          <p>Email: acc.sevapatra@gmail.com, Contact: +91 9102971230</p>
           <br />
           <footer style="color: #aaa;">
-            <p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p>
+            <p>Copyright © 2022 SEVAPATRA FOUNDATION.<br/> All rights reserved SEVAPATRA FOUNDATION</p>
           </footer>
         </div>
       `,
@@ -405,14 +414,14 @@ router.post("/payslip_mail_send_advanceSettlement", async (req, res) => {
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "iskdhn.technical@gmail.com",
-        pass: "dhkotkapeoduhuei",
+        user: "acc.sevapatra@gmail.com",
+        pass: process.env.NODE_MAILER_PASSWORD,
       },
     });
     var mailList = [await req.body.email_id, 'acc.iskcondhanbad@gmail.com'];
 
     // let mailOptions = {
-    //   from: "iskdhn.technical@gmail.com",
+    //   from: "acc.sevapatra@gmail.com",
     //   to: mailList,
     //   subject: `${req.body.payslip_id}`,
     //   html: `<h1><b>${req.body.payslip_id
@@ -430,10 +439,10 @@ router.post("/payslip_mail_send_advanceSettlement", async (req, res) => {
     //     Advance Taken:₹ ${req.body.type === "Advance Settlement" ? req.body?.previousFormDetails?.amount : "Nill"} <br/>
     //     Details :<br/> ${req.body.details} <br/>
         
-    //   <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +917644070770</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved ISKCON Dhanbad</p></footer>`,
+    //   <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +91 9102971230</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved SEVAPATRA FOUNDATION</p></footer>`,
     // };
     let mailOptions = {
-      from: "iskdhn.technical@gmail.com",
+      from: "acc.sevapatra@gmail.com",
       to: mailList,
       subject: `${req.body.payslip_id}`,
  
@@ -487,10 +496,10 @@ router.post("/payslip_mail_send_advanceSettlement", async (req, res) => {
           <br />
         <p style="color: #555;">------------</p>
           <p style="color: #555;">Contact Accounts Department </p>
-          <p>Email: iskdhn.technical@gmail.com, Contact: +917644070770</p>
+          <p>Email: acc.sevapatra@gmail.com, Contact: +91 9102971230</p>
           <br />
           <footer style="color: #aaa;">
-            <p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p>
+            <p>Copyright © 2022 SEVAPATRA FOUNDATION.<br/> All rights reserved SEVAPATRA FOUNDATION</p>
           </footer>
         </div>
       `,
@@ -539,37 +548,14 @@ router.post("/payslip_mail_send_hod", async (req, res) => {
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "iskdhn.technical@gmail.com",
-        pass: "dhkotkapeoduhuei",
+        user: "acc.sevapatra@gmail.com",
+        pass: process.env.NODE_MAILER_PASSWORD,
       },
     });
-    // var mailList = 'shiv7255918@gmail.com';
-
-    // let mailOptions = {
-    //   from: "iskdhn.technical@gmail.com",
-    //   to: req.body.hod==="HG Damodar Govind Pr"? "Damodargovinddas.rns@gmail.com" : "hgsapapproval@gmail.com" ,
-    //   subject: `${req.body.payslip_id}(New Payslip Approval)`,
-    //   html: `<h1><b>${req.body.payslip_id
-    //     }</b></h1><br/>
-      
-       
-    //     Name : ${req.body.name} <br/>
-    //     PayslipFilledBy : ${req.body.payslipFilledBy} <br/>,
-    //     Type: ${req.body.type} <br/>
-    //     ${req.body.type=="Internal Transfer" ?  `Cost Center (From) : ${req.body.cost_center}` : `Cost Center : ${req.body.cost_center} `}<br/>
-    //     ${req.body.type=="Internal Transfer" &&  `Cost Center (To) : ${req.body.cost_center_to}   <br/>`}
-    //     Payment Mode: ${req.body.payment_mode} <br/>
-    //     Amount :₹ ${req.body.amount} <br/>
-    //   ${req.body.type === "Advance Settlement" && `Advance Taken:₹ ${req.body?.previousFormDetails?.amount}<br/>`} 
-    //     Details :<br/> ${req.body.details} <br/>
-
-    //     <button  id="approve"><a href="https://iskdhnaccountsdashboard-nr23mxt4ma-de.a.run.app/hod/approvalPage/${req.body.payslip_id}" style="text-decoration: none;">Approve</button>${" "}<button id="raiseQuery"><a href="https://iskdhnaccountsdashboard-nr23mxt4ma-de.a.run.app/hod/queryPage/${req.body.payslip_id}" style="text-decoration: none;">Raise Query</button>
-        
-    //   <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +917644070770</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved ISKCON Dhanbad</p></footer>`,
-    // };
+     
     let mailOptions = {
-      from: "iskdhn.technical@gmail.com",
-      to: req.body.hod==="HG Damodar Govind Pr"? "Damodargovinddas.rns@gmail.com" : "hgsapapproval@gmail.com" ,
+      from: "acc.sevapatra@gmail.com",
+      to: [ "mineyourmind108@gmail.com", "rs4472997@gmail.com"] ,
       subject: `${req.body.payslip_id}(New Payslip Approval)`,
       html: `
       <div style="font-family: Arial, sans-serif; color: #333;">
@@ -611,7 +597,7 @@ router.post("/payslip_mail_send_hod", async (req, res) => {
             </tr>
           </thead>
           <tbody>
-            ${req.body.detailContent.map(item => `
+            ${req.body.detailContent.map(item =>`
               <tr>
                 <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.department}</td>
                 <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${item.itemName}</td>
@@ -624,14 +610,14 @@ router.post("/payslip_mail_send_hod", async (req, res) => {
                <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="margin: 10px auto;">
   <tr>
     <td>
-      <a href="https://iskdhnaccountsdashboard-nr23mxt4ma-de.a.run.app/hod/approvalPage/${req.body.payslip_id}" 
+      <a href="https://accounts-dashboard-o7c7kbwvua-el.a.run.app/hod/approvalPage/${req.body.payslip_id}" 
          style="display: inline-block; padding: 10px 20px; margin: 5px; background-color: #4CAF50; color: white; 
                 text-decoration: none; border-radius: 5px; font-weight: bold;">
         Approve
       </a>
     </td>
     <td>
-      <a href="https://iskdhnaccountsdashboard-nr23mxt4ma-de.a.run.app/hod/queryPage/${req.body.payslip_id}" 
+      <a href="https://accounts-dashboard-o7c7kbwvua-el.a.run.app/hod/queryPage/${req.body.payslip_id}" 
          style="display: inline-block; padding: 10px 20px; margin: 5px; background-color: #f44336; color: white; 
                 text-decoration: none; border-radius: 5px; font-weight: bold;">
         Raise Query
@@ -642,10 +628,10 @@ router.post("/payslip_mail_send_hod", async (req, res) => {
         <br />
       <p style="color: #555;">------------</p>
         <p style="color: #555;">Contact Accounts Department </p>
-        <p>Email: iskdhn.technical@gmail.com, Contact: +917644070770</p>
+        <p>Email: acc.sevapatra@gmail.com, Contact: +91 9102971230</p>
         <br />
         <footer style="color: #aaa;">
-          <p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p>
+          <p>Copyright © 2022 SEVAPATRA FOUNDATION.<br/> All rights reserved SEVAPATRA FOUNDATION</p>
         </footer>
       </div>
     `,
@@ -658,27 +644,7 @@ router.post("/payslip_mail_send_hod", async (req, res) => {
         //console.log("Email sent: " + info.response);
       }
     });
-
-    //   if (req.body.medium == "mail") {
-    //     const updateSession = await Session.findOneAndUpdate(
-    //       { session_id: req.body.sessionId },
-    //       {
-    //         $push: { notified_tutors: req.body.notified_tutors },
-    //       },
-    //       {
-    //         upsert: true,
-    //         new: true,
-    //         setDefaultsOnInsert: true,
-    //       }
-    //     );
-    //     //console.log(updateSession);
-    //   }
-
-    // const updateTutor = await Session.updateOne(
-    //   { session_id: req.body.sessionId, "notified_tutors.tutor_id": req.body.tutorId },
-    //   { $set: { "notified_tutors.$.medium" : 'wa-mail' } }
-    // );
-
+ 
     res.status(200).json("Email sent");
   } catch (err) {
     //console.log(err);
@@ -693,16 +659,16 @@ router.post("/payslip_approved", async (req, res) => {
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "iskdhn.technical@gmail.com",
-        pass: "dhkotkapeoduhuei",
+        user: "acc.sevapatra@gmail.com",
+        pass: process.env.NODE_MAILER_PASSWORD,
       },
     });
-    var mailList = [await req.body.email_id, 'acc.iskcondhanbad@gmail.com'];
-
+    var mailList = [await req.body.email_id];
+  
     let mailOptions = {
-      from: "iskdhn.technical@gmail.com",
+      from: "acc.sevapatra@gmail.com",
       to: mailList,
-      subject: `${req.body.payslip_id}(Approved)`,
+      subject: `${req.body.payslip_id}${req.body.NaamPremHOD.status && req.body.RaviShankarHOD.status?"(Approved By Both HOD)":req.body.RaviShankarHOD.status?"(Approved By Ravishankar Kumar Only)":"(Approved By Naam Prem Prabhu Only)"}`,
       html: `
       <div style="font-family: Arial, sans-serif; color: #333;">
        <h4 style="color: #4CAF50;">Request with payslip id ${req.body.payslip_id} is Approved</h4>
@@ -755,10 +721,10 @@ router.post("/payslip_approved", async (req, res) => {
         <br />
       <p style="color: #555;">------------</p>
         <p style="color: #555;">Contact Accounts Department </p>
-        <p>Email: iskdhn.technical@gmail.com, Contact: +917644070770</p>
+        <p>Email: acc.sevapatra@gmail.com, Contact: +91 9102971230</p>
         <br />
         <footer style="color: #aaa;">
-          <p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p>
+          <p>Copyright © 2022 SEVAPATRA FOUNDATION.<br/> All rights reserved SEVAPATRA FOUNDATION</p>
         </footer>
       </div>
     `
@@ -771,13 +737,10 @@ router.post("/payslip_approved", async (req, res) => {
         //console.log("Email sent: " + info.response);
       }
     });
-
+      const updateValue=req.body
     await payslip.updateOne({
       payslip_id: req.body.payslip_id
-    }, {
-      status: req.body.status,
-      approvalDate :Date.now()
-    })
+    },updateValue)
 
     res.status(200).json("Email sent");
   } catch (err) {
@@ -793,14 +756,14 @@ router.post("/payslip_query_raised", async (req, res) => {
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "iskdhn.technical@gmail.com",
-        pass: "dhkotkapeoduhuei",
+        user: "acc.sevapatra@gmail.com",
+        pass: process.env.NODE_MAILER_PASSWORD,
       },
     });
     var mailList =await req.body.email_id;
 
     let mailOptions = {
-      from: "iskdhn.technical@gmail.com",
+      from: "acc.sevapatra@gmail.com",
       to: mailList,
       subject: `${req.body.payslip_id}(Query Raised)`,
       html: `<h3>HOD has been queried on your payslip no. <b>${req.body.payslip_id}</b></h3><br/>
@@ -822,7 +785,7 @@ router.post("/payslip_query_raised", async (req, res) => {
        Details :<br/> ${req.body.details} <br/>
      
         </p>
-      <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +917644070770</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved ISKCON Dhanbad</p></footer>`,
+      <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +91 9102971230</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved SEVAPATRA FOUNDATION</p></footer>`,
     };
 
     await transporter.sendMail(mailOptions, function (error, info) {
@@ -872,15 +835,15 @@ router.post("/queryReply", async (req, res) => {
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "iskdhn.technical@gmail.com",
-        pass: "dhkotkapeoduhuei",
+        user: "acc.sevapatra@gmail.com",
+        pass: process.env.NODE_MAILER_PASSWORD,
       },
     });
-    // var mailList = ['iskdhn.technical@gmail.com'];
+    // var mailList = ['acc.sevapatra@gmail.com'];
 
     let mailOptions = {
-      from: "iskdhn.technical@gmail.com",
-      to: req.body.hod==="HG Damodar Govind Pr"? "Damodargovinddas.rns@gmail.com" : "hgsapapproval@gmail.com" ,
+      from: "acc.sevapatra@gmail.com",
+      to: ["mineyourmind108@gmail.com" , "rs4472997@gmail.com"] ,
       subject: `${req.body.payslip_id}(Reply to query)`,
  
       html: `
@@ -935,10 +898,10 @@ router.post("/queryReply", async (req, res) => {
         <br />
       <p style="color: #555;">------------</p>
         <p style="color: #555;">Contact Accounts Department </p>
-        <p>Email: iskdhn.technical@gmail.com, Contact: +917644070770</p>
+        <p>Email: acc.sevapatra@gmail.com, Contact: +91 9102971230</p>
         <br />
         <footer style="color: #aaa;">
-          <p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p>
+          <p>Copyright © 2022 SEVAPATRA FOUNDATION.<br/> All rights reserved SEVAPATRA FOUNDATION</p>
         </footer>
       </div>
     `
@@ -1043,14 +1006,14 @@ router.post("/payslip_mail_send_paid_sections", async (req, res) => {
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "iskdhn.technical@gmail.com",
-        pass: "dhkotkapeoduhuei",
+        user: "acc.sevapatra@gmail.com",
+        pass: process.env.NODE_MAILER_PASSWORD,
       },
     });
     var mailList =await req.body.email_id;
     console.log({mailllllll:req.body})
     // let mailOptions = {
-    //   from: "iskdhn.technical@gmail.com",
+    //   from: "acc.sevapatra@gmail.com",
     //   to: mailList,
     //   subject: `${req.body.payslip_id}(Amount Paid)`,
     //   html: `<h1 style="color: green"><b> Payment Done(Kindly Check Payment Date & Transaction ID below) ${req.body.status === "paidButBillPending" ? "(Bill Is Pending)" : ""}</b></h1><br/>
@@ -1068,10 +1031,10 @@ router.post("/payslip_mail_send_paid_sections", async (req, res) => {
     //       Amount :₹ ${req.body.amount} <br/>
     //       Details :<br/> ${req.body.details} <br/>
           
-    //     <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +917644070770</p><br/><br /><footer><p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p></footer>`,
+    //     <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +91 9102971230</p><br/><br /><footer><p>Copyright © 2022 SEVAPATRA FOUNDATION.<br/> All rights reserved SEVAPATRA FOUNDATION</p></footer>`,
     // };
     let mailOptions = {
-      from: "iskdhn.technical@gmail.com",
+      from: "acc.sevapatra@gmail.com",
       to: mailList,
       subject: `${req.body.payslip_id}(Amount Paid)`,
       html: `
@@ -1133,10 +1096,10 @@ router.post("/payslip_mail_send_paid_sections", async (req, res) => {
           <br />
         <p style="color: #555;">------------</p>
           <p style="color: #555;">Contact Accounts Department </p>
-          <p>Email: iskdhn.technical@gmail.com, Contact: +917255918744</p>
+          <p>Email: acc.sevapatra@gmail.com, Contact: +917255918744</p>
           <br />
           <footer style="color: #aaa;">
-            <p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p>
+            <p>Copyright © 2022 SEVAPATRA FOUNDATION.<br/> All rights reserved SEVAPATRA FOUNDATION</p>
           </footer>
         </div>
       `
@@ -1162,15 +1125,15 @@ router.post("/payslip_mail_send_cancelled_sections", async (req, res) => {
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "iskdhn.technical@gmail.com",
-        pass: "dhkotkapeoduhuei",
+        user: "acc.sevapatra@gmail.com",
+        pass: process.env.NODE_MAILER_PASSWORD,
       },
     });
     console.log({testinggg:req.body})
     var mailList =await req.body.email_id;
 
     // let mailOptions = {
-    //   from: "iskdhn.technical@gmail.com",
+    //   from: "acc.sevapatra@gmail.com",
     //   to: mailList,
     //   subject: `${req.body.payslip_id}(Payslip Cancelled)`,
     //   html: `<h1 style="color: red"><b> Payslip Is Cancelled</b></h1> 
@@ -1187,10 +1150,10 @@ router.post("/payslip_mail_send_cancelled_sections", async (req, res) => {
     //       Amount :₹ ${req.body.amount} <br/>
     //       Details :<br/> ${req.body.details} <br/>
           
-    //     <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +917644070770</p><br/><br /><footer><p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p></footer>`,
+    //     <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +91 9102971230</p><br/><br /><footer><p>Copyright © 2022 SEVAPATRA FOUNDATION.<br/> All rights reserved SEVAPATRA FOUNDATION</p></footer>`,
     // };
     let mailOptions = {
-      from: "iskdhn.technical@gmail.com",
+      from: "acc.sevapatra@gmail.com",
       to: mailList,
       subject: `${req.body.payslip_id}(Payslip Cancelled)`,
       html: `
@@ -1245,10 +1208,10 @@ router.post("/payslip_mail_send_cancelled_sections", async (req, res) => {
           <br />
         <p style="color: #555;">------------</p>
           <p style="color: #555;">Contact Accounts Department </p>
-          <p>Email: iskdhn.technical@gmail.com, Contact: +917644070770</p>
+          <p>Email: acc.sevapatra@gmail.com, Contact: +91 9102971230</p>
           <br />
           <footer style="color: #aaa;">
-            <p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p>
+            <p>Copyright © 2022 SEVAPATRA FOUNDATION.<br/> All rights reserved SEVAPATRA FOUNDATION</p>
           </footer>
         </div>
       `,
@@ -1275,14 +1238,14 @@ router.post("/payslip_mail_send_paidButBillSending_sections", async (req, res) =
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "iskdhn.technical@gmail.com",
-        pass: "dhkotkapeoduhuei",
+        user: "acc.sevapatra@gmail.com",
+        pass: process.env.NODE_MAILER_PASSWORD,
       },
     });
     var mailList =await req.body.email_id;
 
     // let mailOptions = {
-    //   from: "iskdhn.technical@gmail.com",
+    //   from: "acc.sevapatra@gmail.com",
     //   to: mailList,
     //   subject: `${req.body.payslip_id}(Payslip paid but bill pending)`,
     //   html: `  <h2 style="color: black"><b>Your payment is done but you haven't submitted the bill. Submit the bill asap otherwise your next payslip will not be processed. 
@@ -1299,10 +1262,10 @@ router.post("/payslip_mail_send_paidButBillSending_sections", async (req, res) =
     //       Amount :₹ ${req.body.amount} <br/>
     //       Details :<br/> ${req.body.details} <br/>
           
-    //     <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +917644070770</p><br/><br /><footer><p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p></footer>`,
+    //     <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +91 9102971230</p><br/><br /><footer><p>Copyright © 2022 SEVAPATRA FOUNDATION.<br/> All rights reserved SEVAPATRA FOUNDATION</p></footer>`,
     // };
     let mailOptions = {
-      from: "iskdhn.technical@gmail.com",
+      from: "acc.sevapatra@gmail.com",
       to: mailList,
       subject: `${req.body.payslip_id}(Payslip paid but bill pending)`,
       html: `
@@ -1357,10 +1320,10 @@ router.post("/payslip_mail_send_paidButBillSending_sections", async (req, res) =
           <br />
         <p style="color: #555;">------------</p>
           <p style="color: #555;">Contact Accounts Department </p>
-          <p>Email: iskdhn.technical@gmail.com, Contact: +917644070770</p>
+          <p>Email: acc.sevapatra@gmail.com, Contact: +91 9102971230</p>
           <br />
           <footer style="color: #aaa;">
-            <p>Copyright © 2022 ISKCON Dhanbad.<br/> All rights reserved ISKCON Dhanbad</p>
+            <p>Copyright © 2022 SEVAPATRA FOUNDATION.<br/> All rights reserved SEVAPATRA FOUNDATION</p>
           </footer>
         </div>
       `
