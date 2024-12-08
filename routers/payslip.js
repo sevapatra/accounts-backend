@@ -668,7 +668,7 @@ router.post("/payslip_approved", async (req, res) => {
     let mailOptions = {
       from: "acc.sevapatra@gmail.com",
       to: mailList,
-      subject: `${req.body.payslip_id}${req.body.NaamPremHOD.status && req.body.RaviShankarHOD.status?"(Approved By Both HOD)":req.body.RaviShankarHOD.status?"(Approved By Ravishankar Kumar Only)":"(Approved By Naam Prem Prabhu Only)"}`,
+      subject: `${req.body.payslip_id}${req.body.NaamPremHOD.status && req.body.RaviShankarHOD.status?"(Approved By Both HOD)":req.body.RaviShankarHOD.status?"(Approved By Ravishankar Only)":"(Approved By Naam Prem Prabhu Only)"}`,
       html: `
       <div style="font-family: Arial, sans-serif; color: #333;">
        <h4 style="color: #4CAF50;">Request with payslip id ${req.body.payslip_id} is Approved</h4>
