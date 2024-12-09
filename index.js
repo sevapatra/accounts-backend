@@ -49,6 +49,7 @@ app.use(helmet());
 app.use(morgan("common"));
 app.use("/api/payslip",payslip)
 app.use("/api/auth",auth)
+ 
 
 
 
