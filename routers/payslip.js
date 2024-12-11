@@ -610,14 +610,14 @@ router.post("/payslip_mail_send_hod", async (req, res) => {
                <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="margin: 10px auto;">
   <tr>
     <td>
-      <a href="https://accounts-dashboard-o7c7kbwvua-el.a.run.app/hod/approvalPage/${req.body.payslip_id}" 
+      <a href="https://courageous-malabi-0a1435.netlify.app/hod/approvalPage/${req.body.payslip_id}" 
          style="display: inline-block; padding: 10px 20px; margin: 5px; background-color: #4CAF50; color: white; 
                 text-decoration: none; border-radius: 5px; font-weight: bold;">
         Approve
       </a>
     </td>
     <td>
-      <a href="https://accounts-dashboard-o7c7kbwvua-el.a.run.app/hod/queryPage/${req.body.payslip_id}" 
+      <a href="https://courageous-malabi-0a1435.netlify.app/hod/queryPage/${req.body.payslip_id}" 
          style="display: inline-block; padding: 10px 20px; margin: 5px; background-color: #f44336; color: white; 
                 text-decoration: none; border-radius: 5px; font-weight: bold;">
         Raise Query
