@@ -1097,7 +1097,7 @@ router.post("/payslip_mail_send_paid_sections", async (req, res) => {
           <br />
         <p style="color: #555;">------------</p>
           <p style="color: #555;">Contact Accounts Department </p>
-          <p>Email: acc.sevapatra@gmail.com, Contact: +917255918744</p>
+          <p>Email: acc.sevapatra@gmail.com, Contact: +919102971230</p>
           <br />
           <footer style="color: #aaa;">
             <p>Copyright © 2022 SEVAPATRA FOUNDATION.<br/> All rights reserved SEVAPATRA FOUNDATION</p>
