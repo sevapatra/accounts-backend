@@ -89,6 +89,7 @@ router.post("/new_payslip", async (req, res) => {
       amount: req.body.amount,
       type: req.body.type,
       cost_center: req.body.cost_center,
+      expenseTag: req.body.expenseTag,
       cost_center_to: req.body.cost_center_to,
       payment_mode:req.body.payment_mode,
       bank:req.body.bank,
@@ -280,7 +281,7 @@ router.post("/payslip_mail_send_advance", async (req, res) => {
         pass: process.env.NODE_MAILER_PASSWORD,
       },
     });
-    var mailList = [await req.body.email_id, 'acc.iskcondhanbad@gmail.com', ];
+    var mailList = [await req.body.email_id, 'acc.sevapatra@gmail.com', ];
 
     // let mailOptions = {
     //   from: "acc.sevapatra@gmail.com",
@@ -300,7 +301,7 @@ router.post("/payslip_mail_send_advance", async (req, res) => {
     //     Amount :₹ ${req.body.amount} <br/>
     //     Details :<br/> ${req.body.details} <br/>
         
-    //   <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +91 9102971230</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved SEVAPATRA FOUNDATION</p></footer>`,
+    //   <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.sevapatra@gmail.com, Contact: +91 9102971230</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved SEVAPATRA FOUNDATION</p></footer>`,
     // };
     let mailOptions = {
       from: "acc.sevapatra@gmail.com",
@@ -418,7 +419,7 @@ router.post("/payslip_mail_send_advanceSettlement", async (req, res) => {
         pass: process.env.NODE_MAILER_PASSWORD,
       },
     });
-    var mailList = [await req.body.email_id, 'acc.iskcondhanbad@gmail.com'];
+    var mailList = [await req.body.email_id, 'acc.sevapatra@gmail.com'];
 
     // let mailOptions = {
     //   from: "acc.sevapatra@gmail.com",
@@ -439,7 +440,7 @@ router.post("/payslip_mail_send_advanceSettlement", async (req, res) => {
     //     Advance Taken:₹ ${req.body.type === "Advance Settlement" ? req.body?.previousFormDetails?.amount : "Nill"} <br/>
     //     Details :<br/> ${req.body.details} <br/>
         
-    //   <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +91 9102971230</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved SEVAPATRA FOUNDATION</p></footer>`,
+    //   <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.sevapatra@gmail.com, Contact: +91 9102971230</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved SEVAPATRA FOUNDATION</p></footer>`,
     // };
     let mailOptions = {
       from: "acc.sevapatra@gmail.com",
@@ -785,7 +786,7 @@ router.post("/payslip_query_raised", async (req, res) => {
        Details :<br/> ${req.body.details} <br/>
      
         </p>
-      <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +91 9102971230</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved SEVAPATRA FOUNDATION</p></footer>`,
+      <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.sevapatra@gmail.com, Contact: +91 9102971230</p><br/><br /><footer><p>Copyright © 2022 ISKCON .<br/> All rights reserved SEVAPATRA FOUNDATION</p></footer>`,
     };
 
     await transporter.sendMail(mailOptions, function (error, info) {
@@ -1031,7 +1032,7 @@ router.post("/payslip_mail_send_paid_sections", async (req, res) => {
     //       Amount :₹ ${req.body.amount} <br/>
     //       Details :<br/> ${req.body.details} <br/>
           
-    //     <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +91 9102971230</p><br/><br /><footer><p>Copyright © 2022 SEVAPATRA FOUNDATION.<br/> All rights reserved SEVAPATRA FOUNDATION</p></footer>`,
+    //     <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.sevapatra@gmail.com, Contact: +91 9102971230</p><br/><br /><footer><p>Copyright © 2022 SEVAPATRA FOUNDATION.<br/> All rights reserved SEVAPATRA FOUNDATION</p></footer>`,
     // };
     let mailOptions = {
       from: "acc.sevapatra@gmail.com",
@@ -1150,7 +1151,7 @@ router.post("/payslip_mail_send_cancelled_sections", async (req, res) => {
     //       Amount :₹ ${req.body.amount} <br/>
     //       Details :<br/> ${req.body.details} <br/>
           
-    //     <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +91 9102971230</p><br/><br /><footer><p>Copyright © 2022 SEVAPATRA FOUNDATION.<br/> All rights reserved SEVAPATRA FOUNDATION</p></footer>`,
+    //     <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.sevapatra@gmail.com, Contact: +91 9102971230</p><br/><br /><footer><p>Copyright © 2022 SEVAPATRA FOUNDATION.<br/> All rights reserved SEVAPATRA FOUNDATION</p></footer>`,
     // };
     let mailOptions = {
       from: "acc.sevapatra@gmail.com",
@@ -1262,7 +1263,7 @@ router.post("/payslip_mail_send_paidButBillSending_sections", async (req, res) =
     //       Amount :₹ ${req.body.amount} <br/>
     //       Details :<br/> ${req.body.details} <br/>
           
-    //     <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.iskcondhanbad@gmail.com, Contact: +91 9102971230</p><br/><br /><footer><p>Copyright © 2022 SEVAPATRA FOUNDATION.<br/> All rights reserved SEVAPATRA FOUNDATION</p></footer>`,
+    //     <br /><p>Thanks,</p><p>Accounts Department</p><p>Email: acc.sevapatra@gmail.com, Contact: +91 9102971230</p><br/><br /><footer><p>Copyright © 2022 SEVAPATRA FOUNDATION.<br/> All rights reserved SEVAPATRA FOUNDATION</p></footer>`,
     // };
     let mailOptions = {
       from: "acc.sevapatra@gmail.com",

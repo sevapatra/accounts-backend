@@ -33,6 +33,9 @@ const Payslip = new mongoose.Schema(
     cost_center: {
       type: String,
     },
+    expenseTag: {
+      type: String,
+    },
     cost_center_to: {
       type: String,
     },
